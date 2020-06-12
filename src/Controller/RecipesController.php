@@ -69,9 +69,9 @@ class RecipesController extends AbstractController
     }
 
     /**
-     * @Route("/recipe/edit/{id}", name="update_one_recipe", methods={"POST"})
+     * @Route("/recipe/edit/{id}", name="update_one_recipe", methods={"PUT"})
      */
-    public function updateOne($id, SerializerInterface $serializer, Request $request){
+    public function updateOne($id, SerializerInterface $normalizer, Request $request){
         $entityManager = $this->getDoctrine()->getManager();
         $recipe = $entityManager->getRepository(Recipe::class)->find($id);
 
@@ -82,7 +82,12 @@ class RecipesController extends AbstractController
             return $response;
         }
         try{
+            $reqContent = $request->getContent();
+            $recipeRequest = $normalizer->deserialize($reqContent, Recipe::class, 'json');
 
+            if($recipeRequest->getTitle() != "") $recipe->setTitle($recipeRequest->getTitle());
+            if($recipeRequest->getSubtitle() != "") $recipe->setSubtitle($recipeRequest->getSubtitle());
+            if($recipeRequest->getIngredient() != "") $recipe->setIngredient($recipeRequest->getIngredient());
 
             $entityManager->flush();
 
