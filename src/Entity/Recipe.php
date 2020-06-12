@@ -28,9 +28,9 @@ class Recipe
     private $subtitle;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\Column(type="string")
      */
-    private $ingredient = [];
+    private $ingredient;
 
     public function getId(): ?int
     {
@@ -61,12 +61,12 @@ class Recipe
         return $this;
     }
 
-    public function getIngredient(): ?array
+    public function getIngredient(): ?string
     {
         return $this->ingredient;
     }
 
-    public function setIngredient(array $ingredient): self
+    public function setIngredient(?string $ingredient): self
     {
         $this->ingredient = $ingredient;
 
