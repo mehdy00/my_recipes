@@ -67,6 +67,40 @@ class RecipesController extends AbstractController
             ], 400);
         }
     }
+
+    /**
+     * @Route("/recipe/edit/{id}", name="update_one_recipe", methods={"POST"})
+     */
+    public function updateOne($id, RecipeRepository $recipeRepository, SerializerInterface $serializer, Request $request){
+        $entityManager = $this->getDoctrine()->getManager();
+        $recipe = $entityManager->getRepository(Recipe::class)->find($id);
+
+        if (!$recipe) {
+            $response = new Response("Resource not found", 404, [
+                "Content-Type" => "application/json"
+            ]);
+            return $response;
+        }
+        try{
+            $reqContent = $request->getContent();
+            $recipeRequest = $serializer->deserialize($reqContent, Recipe::class, 'json');
+
+            if($recipeRequest->getTitle() != "") $recipe->setTitle($recipeRequest->getTitle());
+            if($recipeRequest->getSubtitle() != "") $recipe->setSubtitle($recipeRequest->getSubtitle());
+            if($recipeRequest->getIngredient() != "") $recipe->setIngredient($recipeRequest->getIngredient());
+
+            $entityManager->flush();
+
+            return $this->json([
+                'status' => 200,
+                'message' => 'Resource Updated successfully'
+            ], 200);
+
+        }catch(NotEncodableValueException $e){
+
+        }
+        $recipeNormalize = $serializer->normalize($recipe, "json");
+    }
 }
 
 ?>
