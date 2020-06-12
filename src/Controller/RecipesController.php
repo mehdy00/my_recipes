@@ -45,6 +45,7 @@ class RecipesController extends AbstractController
      * @Route("/recipes", name="create_recipes", methods={"POST"})
      * @param Request $request
      * @param SerializerInterface $serializer
+     * @param EntityManagerInterface $em
      * @return JsonResponse
      */
     public function createOne(Request $request, SerializerInterface $serializer, EntityManagerInterface $em){
@@ -70,6 +71,10 @@ class RecipesController extends AbstractController
 
     /**
      * @Route("/recipe/edit/{id}", name="update_one_recipe", methods={"PUT"})
+     * @param $id
+     * @param SerializerInterface $normalizer
+     * @param Request $request
+     * @return JsonResponse|Response
      */
     public function updateOne($id, SerializerInterface $normalizer, Request $request){
         $entityManager = $this->getDoctrine()->getManager();
@@ -106,6 +111,8 @@ class RecipesController extends AbstractController
 
     /**
      * @Route("/recipe/delete/{id}", name="delete_one_recipe", methods={"POST"})
+     * @param $id
+     * @return JsonResponse|Response
      */
     public function deleteOne($id){
         $entityManager = $this->getDoctrine()->getManager();
