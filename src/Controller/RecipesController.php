@@ -71,7 +71,7 @@ class RecipesController extends AbstractController
     /**
      * @Route("/recipe/edit/{id}", name="update_one_recipe", methods={"POST"})
      */
-    public function updateOne($id, RecipeRepository $recipeRepository, SerializerInterface $serializer, Request $request){
+    public function updateOne($id, SerializerInterface $serializer, Request $request){
         $entityManager = $this->getDoctrine()->getManager();
         $recipe = $entityManager->getRepository(Recipe::class)->find($id);
 
