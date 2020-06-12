@@ -97,9 +97,11 @@ class RecipesController extends AbstractController
             ], 200);
 
         }catch(NotEncodableValueException $e){
-
+            return $this->json([
+                'status' => 400,
+                'message' => $e->getMessage()
+            ], 400);
         }
-        $recipeNormalize = $serializer->normalize($recipe, "json");
     }
 }
 
